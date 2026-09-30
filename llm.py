@@ -1,20 +1,8 @@
-"""
-llm.py
-======
-Everything related to calling the AI model (Groq). If you ever swap Groq
-for OpenAI, Anthropic, or Gemini, this is the ONLY file you'd need to change.
-"""
-
 import os
 import time
 
 
 def call_llm_with_retry(client, prompt: str, max_attempts: int = 3):
-    """
-    STEP: A small safety wrapper. Servers occasionally return a temporary
-    'high demand' or rate-limit error that isn't really your code's fault.
-    Instead of crashing, this tries again a few times with a short pause.
-    """
     for attempt in range(1, max_attempts + 1):
         try:
             return client.chat.completions.create(
@@ -33,11 +21,6 @@ def call_llm_with_retry(client, prompt: str, max_attempts: int = 3):
 
 
 def summarize_with_llm(company: str, category_name: str, raw_text: str) -> str:
-    """
-    STEP: Send raw search results to Groq and ask it to extract only the
-    genuinely new, concrete facts — with sources. This is the "reasoning"
-    step in the agent loop: deciding what's actually worth reporting.
-    """
     from groq import Groq
 
     client = Groq(api_key=os.environ["GROQ_API_KEY"])
@@ -61,12 +44,6 @@ Respond with a short bulleted list only, no preamble."""
 
 
 def write_executive_summary(company: str, full_briefing_body: str) -> str:
-    """
-    STEP: The 'business judgment' layer. Instead of just listing facts,
-    this asks the AI to step back and think like an analyst: what actually
-    matters, and what should a strategy/product team do about it? This is
-    what turns a data dump into a business deliverable.
-    """
     from groq import Groq
 
     client = Groq(api_key=os.environ["GROQ_API_KEY"])

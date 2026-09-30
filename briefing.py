@@ -1,10 +1,3 @@
-"""
-briefing.py
-===========
-Builds the briefing: loops through categories, calls search + llm for each,
-and formats everything into the final Markdown document.
-"""
-
 import time
 from datetime import date
 
